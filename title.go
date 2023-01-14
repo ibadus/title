@@ -1,12 +1,13 @@
 package title
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
 )
 
-// Set a title on the terminal for macos and windows
+// Set a title on the terminal
 func Set(title string) {
 	if runtime.GOOS == "windows" {
 		cmd := exec.Command("cmd", "/C", "title", title)
@@ -30,4 +31,9 @@ func Set(title string) {
 			return
 		}
 	}
+}
+
+// Set a title on the terminal with a formatted strings
+func Setf(title string, args ...interface{}) {
+	Set(fmt.Sprintf(title, args...))
 }
