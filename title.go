@@ -8,7 +8,15 @@ import (
 
 // Set a title on the terminal for macos and windows
 func Set(title string) {
-	if runtime.GOOS == "darwin" {
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("cmd", "/C", "title", title)
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Run(); err != nil {
+			return
+		}
+	} else {
 		cmd := exec.Command("echo", "-n", "\033]0;"+title+"\007")
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
@@ -19,15 +27,6 @@ func Set(title string) {
 		}
 		err = cmd.Wait()
 		if err != nil {
-			return
-		}
-	} else {
-		// set the title of the terminal
-		cmd := exec.Command("cmd", "/C", "title", title)
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		if err := cmd.Run(); err != nil {
 			return
 		}
 	}
